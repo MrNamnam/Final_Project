@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="smokeDetector.views.Chat">
+    <ContentPage.Content>
+        <StackLayout>
+
+
+            <Grid RowSpacing="0" 
+           ColumnSpacing="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="1" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <ListView x:Name="listMessage" Grid.Row="0"
+                                HasUnevenRows="True"
+                                IsVisible="True" Margin="0" 
+                 VerticalOptions="FillAndExpand" 
+                 SeparatorColor="Transparent" >
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+
+                        <ViewCell >
+                                <StackLayout>
+                                    <StackLayout Padding="10"  BackgroundColor="{Binding BackgroundColor}"  Margin="10,10,80,10" IsVisible="{Binding isFirefighters}">
+                                        <Label Text="{Binding text}" FontAttributes="Bold" TextColor="{Binding textColor}" FontSize="15" />
+                                    </StackLayout>
+
+                                    <StackLayout  Padding="10"  BackgroundColor="{Binding BackgroundColor}"  Margin="80,10,10,10" IsVisible="{Binding isYou}" >
+                                        <Label Text="{Binding text}" FontAttributes="Bold" TextColor="{Binding textColor}" FontSize="15" />
+                                    </StackLayout>
+                                </StackLayout>
+                            </ViewCell>
+
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+                <BoxView HorizontalOptions="FillAndExpand"
+                 HeightRequest="1"
+                 BackgroundColor="LightGray"
+                 Grid.Row="1"/>
+                
+              
+            </Grid>
+            <Grid RowSpacing="0" 
+           ColumnSpacing="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                <Entry x:Name="TextEntry" 
+                 Margin="1"  
+                 TextColor="Black" 
+                 Keyboard="Chat"  
+                 HorizontalOptions="FillAndExpand" 
+                 PlaceholderColor="LightGray"
+                 Placeholder="Type your message here"
+                 Grid.Row="0" 
+                 Grid.Column="0"
+                 />
+                <Label  x:Name="sendLabel" Text="Send" TextColor="Black"
+               Grid.Row="0"
+               Grid.Column="1"
+               VerticalTextAlignment="Center">
+                        
+                    </Label>
+                </Grid>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="smokeDetector.views.UsersListPage"   NavigationPage.HasNavigationBar="True">
+    <ContentPage.ToolbarItems >
+        <ToolbarItem Text="Logout"  Priority="1" Clicked="MainPageButton_Clicked" />
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+        <ScrollView>
+            <AbsoluteLayout Margin="1,0" IsVisible="True">
+
+                <FlexLayout IsVisible="True" JustifyContent="SpaceEvenly" Direction="Column" AlignItems="Start"  >
+
+                    <Entry x:Name="addDeviceEntry"  Placeholder="Device Name" FontSize="Medium" FlexLayout.AlignSelf="Stretch"  HorizontalOptions="Start"  TextColor="Black" Keyboard="Text" />
+                    <Entry x:Name="addDeviceAddress"  Placeholder="Home number and apartment address " FontSize="Medium" FlexLayout.AlignSelf="Stretch"  HorizontalOptions="Start"  TextColor="Black" Keyboard="Text" />
+                    <Button Text="Add Device" BackgroundColor="LightBlue" FlexLayout.AlignSelf="Center"  CornerRadius="5"   Clicked="AddDevice_Clicked"/>
+                    <Label Text="" FontAttributes="Bold"  FlexLayout.AlignSelf="Center"   FontSize="Large"/>
+                    <Label Text="" FontAttributes="Bold"  FlexLayout.AlignSelf="Center"   FontSize="Large"/>
+                    <Label Text="Your Devices" FontAttributes="Bold"  FlexLayout.AlignSelf="Center" TextColor="DarkCyan"  FontSize="Large"/>
+                <StackLayout Margin="20"
+                    Orientation="Horizontal"
+                    HorizontalOptions="Center">
+                        <Button Text="Delete" Clicked="DeleteDevice_Clicked" BackgroundColor="Red"    CornerRadius="5" FlexLayout.AlignSelf="Stretch"   FontSize="Small"/>
+                        <Button Text="Map" Clicked="GetMap_Clicked" BackgroundColor="LightBlue"   CornerRadius="5" FlexLayout.AlignSelf="Stretch"   FontSize="Small"/>
+                        <Button Text="History" Clicked="GetEventsHistory_Cliced" BackgroundColor="LightBlue"  CornerRadius="5" FlexLayout.AlignSelf="Stretch"  FontSize="Small"/>
+                        
+
+                    </StackLayout>
+                    <StackLayout x:Name="chat" Margin="80,0,0,0"    IsVisible="False">
+                        <Button  Text="Contact Firefighters" Clicked="chat_Clicked" BackgroundColor="LightBlue"   CornerRadius="5" FlexLayout.AlignSelf="Stretch"  FontSize="Small"/>
+
+                    </StackLayout>
+
+                    <ListView x:Name="listUser"
+                                HasUnevenRows="True"
+                                IsVisible="True">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+
+                            <ViewCell>
+                                <StackLayout Margin="3,3,3,3">
+
+
+                                    <Label Text="{Binding device_name}" FontAttributes="Bold" TextColor="Black"  FontSize="20"/>
+                                        <Label Text="{Binding address}" FontAttributes="Bold" TextColor="LightSlateGray" FontSize="12"/>
+                                        <Button x:Name="YesfalseAlarm" Text="False Alarm!" Clicked="yesFalseAlarm_Clicked" BackgroundColor="Red" IsVisible="{Binding falseALarmButton}"  CornerRadius="5" FlexLayout.AlignSelf="Stretch"  FontSize="Small"/>
+
+                                    </StackLayout>
+                            </ViewCell>
+
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                   
+                </FlexLayout>
+                <ContentView x:Name="falseAlarm" BackgroundColor="#C0808080" Padding="0, 0" IsVisible="False" HeightRequest="0" AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All">
+                <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
+                    <StackLayout x:Name="stackIncrese" Orientation="Vertical" HeightRequest="200" WidthRequest="300" BackgroundColor="White">
+                            <Label x:Name="falseAlarmLabel"  FontAttributes="Bold" TextColor="Black"  FontSize="20" Text="Is It False Alarm?" VerticalOptions="StartAndExpand" HorizontalOptions="FillAndExpand"></Label>
+                        <Button x:Name="YesButton"  Clicked="yesFalseAlarm_Clicked" BackgroundColor="Green"  Text="Yes" HorizontalOptions="EndAndExpand" VerticalOptions="EndAndExpand"/>
+                        <Button x:Name="NoButton"  Clicked="chat_Clicked" BackgroundColor="Red"  Text="No" HorizontalOptions="EndAndExpand" VerticalOptions="EndAndExpand"/>
+                    </StackLayout>
+                </StackLayout>
+            </ContentView>
+
+            
+        </AbsoluteLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

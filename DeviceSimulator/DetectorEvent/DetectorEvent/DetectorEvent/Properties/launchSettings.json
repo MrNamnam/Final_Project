@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "DetectorEvent": {
+      "commandName": "Project",
+      "commandLineArgs": "host start --pause-on-error"
+    }
+  }
+}

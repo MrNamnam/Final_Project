@@ -1,0 +1,212 @@
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+
+
+<header>
+  <button class="menu-button" mat-mini-fab (click)="menuClick()">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <span class="title-name">
+    Fire Force Control Board
+  </span>
+  <span class="station-opt">
+    <label  for="station">Fire-Station:</label>
+    <select [(ngModel)]="station">
+      <option value="Eilat">Eilat</option>
+      <option value="Jaffa">Jaffa</option>
+      <option value="Haifa">Haifa</option>
+      <option value="Jerusalem">Jerusalem</option>
+      <option value="Beer Sheva">Be'er Sheva</option>
+    </select>
+  </span>
+  
+</header>
+
+
+<div [id]="mySidenav" class="sidenav">
+  <a class="sidenav-option" (click)="changeToPage('alertsPage')">Alerts</a>
+  <a class="sidenav-option" (click)="changeToPage('monitorPage')">Monitor</a>
+  <a class="sidenav-option" (click)="changeToOnlyMapPage('mapPage')">Map</a>
+  <a class="sidenav-option" (click)="changeToPage('historyAlertsPage')">Alerts History</a>
+  <a class="sidenav-option" (click)="changeToPage('aboutPage')">About us</a>
+</div>
+
+<div *ngIf="page=='alertsPage'">
+  <mat-accordion class="mat-accordion">
+    <h1 class="alerthdr">Urgent Alerts</h1>
+
+
+    <mat-expansion-panel *ngFor="let alert of ALERTS_DATA; let i = index;"
+                         (opened)="panelOpenState = true"
+                         (closed)="panelOpenState = false">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Device ID: {{  alert["alert_obj"].rowKey}}
+        </mat-panel-title>
+        <span class="redText" style="padding-left:0.5em"> {{alert["alert_message"]}} </span>
+        <mat-panel-title>
+          City: {{  alert["city"] }}
+        </mat-panel-title>
+        <mat-panel-title>
+          Client's Name: {{  alert["client_obj"].name}}
+        </mat-panel-title>
+        <mat-panel-title>
+          Client's Email: {{  alert["client_obj"].rowKey}}
+        </mat-panel-title>
+        <mat-panel-description>
+          Client's Phone Number: {{alert["client_obj"].phone_number}}
+          <!-- Currently I am {{panelOpenState ? 'open' : 'closed'}} -->
+        </mat-panel-description>
+        <!--changing iframe according to the button id-->
+
+      </mat-expansion-panel-header>
+
+      False Alarm?
+      <mat-checkbox class="event-info" (change)="changeDisabled(i)"> </mat-checkbox>
+      Injured:
+      <input class="event-info" matInput type="number" [(ngModel)]="injured" placeholder="Number" [disabled]="this.ALERTS_DATA[i].checked">
+      Description:
+      <input class="event-info" matInput #message maxlength="50" [(ngModel)]="details" placeholder="Event details" [disabled]="this.ALERTS_DATA[i].checked">
+      
+      <button class="event-info" mat-raised-button color="primary" (click)="submitEvent(i)">Submit</button> 
+      
+      <button mat-raised-button color="primary" class="map-button" id="dynamicId{{i}}" (click)="changeToOnlyMapPage('mapPage'); whichMap(i); getDirection()">On Map</button>
+
+      <button class="event-info" mat-raised-button color="primary" (click)="chatBoxFunc(i)">Chat</button>
+      
+    </mat-expansion-panel>
+
+
+  </mat-accordion>
+</div>
+
+
+<div *ngIf="page=='monitorPage'">
+  <app-monitor-charts></app-monitor-charts>
+</div>
+
+
+
+
+
+<div *ngIf="page=='mapPage'">
+
+  <h1 class="alerthdr">Alerts On Map</h1>
+
+
+  <h3 class="alerthdr">Press On Active Alert To Get Device ID</h3>
+  <div class="dist" *ngIf="maptype != -1">
+    <p>Distance in meters: {{dis}}</p>
+    <p>time in hours: {{h}}</p>
+    <p >time in minutes: {{m}}</p>
+  </div>
+  <agm-map [latitude]="lat" [longitude]="lng">
+    <div *ngIf="maptype != -1">
+      <agm-direction [origin]="origin"
+                     [destination]="destination">
+
+      </agm-direction>
+    </div>
+    <!--
+  <agm-marker *ngFor="let marker of markers" [latitude]="marker['lat']" [longitude]="marker['lng']">
+    <agm-info-window>
+      <p>{{ marker.label }}</p>
+    </agm-info-window>
+  </agm-marker>
+    -->
+    <agm-marker *ngFor="let marker of ALERTS_DATA; let i = index;" [latitude]="marker.alert_obj.latitude" [longitude]="marker.alert_obj.longitude">
+      <agm-info-window>
+        <p>{{ marker.alert_obj.rowKey }}</p>
+      </agm-info-window>
+    </agm-marker>
+  </agm-map>
+
+
+
+  </div>
+
+
+
+
+
+
+
+  <!-- lina : -->
+<div *ngIf="page=='historyAlertsPage'">
+  <h1 class="alerthdr">Alerts History</h1>
+  <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+    <!-- Position Column -->
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef><b> Device ID </b></mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element["device_id"]}} </mat-cell>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="city">
+      <mat-header-cell *matHeaderCellDef><b> City </b></mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element["city"]}} </mat-cell>
+    </ng-container>
+
+    <!-- lonlat Column -->
+    <ng-container matColumnDef="country">
+      <mat-header-cell *matHeaderCellDef><b> Country </b></mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element["country"]}} </mat-cell>
+    </ng-container>
+
+
+    <!-- Symbol Column -->
+    <ng-container matColumnDef="lat">
+      <mat-header-cell *matHeaderCellDef><b> Latitude </b></mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element["latitude"]}} </mat-cell>
+    </ng-container>
+
+    <!-- Symbol Column -->
+    <ng-container matColumnDef="lon">
+      <mat-header-cell *matHeaderCellDef><b> Longitude</b> </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element["longitude"]}} </mat-cell>
+    </ng-container>
+
+
+    <!-- details Column -->
+    <ng-container matColumnDef="details">
+      <mat-header-cell *matHeaderCellDef><b> Event Details</b> </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element["event_details"]}} </mat-cell>
+    </ng-container>
+
+    <!-- alarm Column -->
+    <ng-container matColumnDef="bool">
+      <mat-header-cell *matHeaderCellDef><b> False/True Alarm </b></mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element["is_false_alarm"]}} </mat-cell>
+    </ng-container>
+
+    <!-- Symbol Column -->
+    <ng-container matColumnDef="number">
+      <mat-header-cell *matHeaderCellDef><b> No. Of Injuries </b></mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element["num_of_injured"]}} </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+</div>
+
+
+
+
+
+
+
+  <div class="aboutus" *ngIf="page=='aboutPage'">
+    <iframe width="50%" height="90%"
+    src="https://www.youtube.com/embed/PmE_LFOwXEM">
+    </iframe>
+  </div>
+
+
+
+  <div class="all-chats" *ngFor="let alert of ALERTS_DATA; let i = index;">
+    <chat-window [user] ="alert['client_obj'].rowKey" (closechatfunck) = "closeChatFunc(alert)" *ngIf="this.ALERTS_DATA[i].chat_box_open==true"></chat-window>
+
+  </div>
+

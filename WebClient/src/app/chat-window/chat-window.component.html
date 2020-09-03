@@ -1,0 +1,25 @@
+<div class="chat-container" [class]="minimized ? 'minimized' : ''">
+    <header>
+        <div>
+            <span>
+                <mat-icon (click)="closeChat()">close</mat-icon>
+            </span>
+            
+            <span class="minimize" (click)="minimized = !minimized">
+                <mat-icon>minimize</mat-icon>
+            </span>
+            <span>
+                Client: {{user}}
+            </span>
+ 
+        </div>
+    </header>
+    
+    <div *ngIf="!minimized" class="messages-list">
+        <div *ngFor="let msg of messages">
+            <p [class]="msg.sender">{{msg.sender}}: {{msg.msg}}</p>
+            <p [class]="msg.sender">{{msg.time}}</p>
+      </div>
+    </div>
+    <footer *ngIf="!minimized"><input [(ngModel)] = "webcompmessage"/><button (click)="SendMessage()">Send</button></footer>
+</div>
