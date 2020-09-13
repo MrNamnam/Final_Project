@@ -1,3 +1,4 @@
+﻿using Microsoft.Build.Framework;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Auth;
 using Microsoft.WindowsAzure.Storage.Table;
@@ -5,9 +6,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace SmokingDetectorFunction
+namespace SmokingDetectorFunctions
 {
-    public class CurrentAlerts : TableEntity
+    public class CurrentAlerts : TableEntity 
     {
         public string email { get; set; }
         public string device_id { get; set; }
@@ -33,4 +34,5 @@ namespace SmokingDetectorFunction
         {
         }
     }
+
 }
